@@ -7,7 +7,7 @@ import cv2 as cv
 import queue, threading
 import numpy as np
 import dlib 
-from std_msgs.msg import String
+from std_msgs.msg import String,Int32
 from math import hypot
 #import matplotlib.pyplot as plt
 import time
@@ -17,6 +17,10 @@ try:
   import os
 except:
   import winsound
+
+sonar = False
+distance_threshold=10
+
 
 class commander:
     '''
@@ -36,7 +40,7 @@ class commander:
       
         self.step_size=1.0
         self.linear_vel=0.14
-        self.angular_vel=0.09
+        self.angular_vel=0.12
         self.rate = rospy.Rate(100)
         rospy.on_shutdown(self.stop_move)
 
@@ -241,11 +245,18 @@ def blink(eye_points,facial_landmarks):
     ratio = hor_line_lenght / ver_line_lenght
     return ratio
 # Continuous interations to output conditions based on function return values
+frontdistance=100
+def frontdistcallback(data):
+  frontdistance=data.data
+
+
 
 
     
 pub = rospy.Publisher('iris_command', String, queue_size=10)
 rospy.init_node('pupil_tracker', anonymous=True)
+if sonar:
+  rospy.Subscriber("frontdist", Int32, frontdistcallback)
 rate = rospy.Rate(10)
 commandcontroller=commander()
 while not rospy.is_shutdown():
@@ -292,6 +303,9 @@ while not rospy.is_shutdown():
         commandcontroller.stop_move()
         beep()
       time.sleep(1)  
+      if sonar:
+        if frontdistance<distance_threshold:
+          commandcontroller.stop_move()
     #if key==ord('q'):
     #    break
 cap.release()
