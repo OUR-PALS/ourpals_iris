@@ -18,8 +18,8 @@ try:
 except:
   import winsound
 
-sonar = False
-distance_threshold=10
+sonar = True
+distance_threshold=12
 
 
 class commander:
@@ -39,8 +39,8 @@ class commander:
         self.initialize_publishers()
       
         self.step_size=1.0
-        self.linear_vel=0.14
-        self.angular_vel=0.12
+        self.linear_vel=0.18
+        self.angular_vel=0.115
         self.rate = rospy.Rate(100)
         rospy.on_shutdown(self.stop_move)
 
@@ -247,7 +247,8 @@ def blink(eye_points,facial_landmarks):
 # Continuous interations to output conditions based on function return values
 frontdistance=100
 def frontdistcallback(data):
-  frontdistance=data.data
+  global frontdistance
+  frontdistance= data.data
 
 
 
@@ -261,7 +262,7 @@ rate = rospy.Rate(10)
 commandcontroller=commander()
 while not rospy.is_shutdown():
     frame=cap.read()
-    
+    front=False
     gray=cv.cvtColor(frame,cv.COLOR_BGR2GRAY)
     faces=detector(gray)
     command="NA"
@@ -274,6 +275,11 @@ while not rospy.is_shutdown():
         left_eye_ratio = blink([36, 37, 38, 39, 40, 41], landmarks)
         right_eye_ratio = blink([42, 43, 44, 45, 46, 47], landmarks)
         blinking_ratio = (left_eye_ratio + right_eye_ratio) / 2
+        if blinking_ratio > 5.7:
+            print("Backward")
+            command="LEFT"
+            commandcontroller.move_backward()
+            break
         if gaze_ratio <= 1:
             print("RIGHT")  
             command="RIGHT"
@@ -282,15 +288,13 @@ while not rospy.is_shutdown():
             print("FORWARD")
             command="FORWARD"
             commandcontroller.move_forward()
+            front=True
         else:
             print("LEFT")
             command="LEFT"
             commandcontroller.move_left()
         
-        if blinking_ratio > 5.7:
-            print("Backward")
-            command="LEFT"
-            commandcontroller.move_backward()
+        
         
 
     pub.publish(command)    
@@ -303,9 +307,15 @@ while not rospy.is_shutdown():
         commandcontroller.stop_move()
         beep()
       time.sleep(1)  
-      if sonar:
+      if sonar and front:
         if frontdistance<distance_threshold:
           commandcontroller.stop_move()
+          print(f"stopping front distance={frontdistance}")
+          for _ in range(0,3):
+            commandcontroller.stop_move()
+            beep()
+            time.sleep(1)  
+          break
     #if key==ord('q'):
     #    break
 cap.release()
