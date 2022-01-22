@@ -1,6 +1,9 @@
 # Pupil tracking package for ROS
 **Please drop a star ⭐ if you like the project.**
 
+[Click here to watch the package in action.](https://www.youtube.com/watch?v=4N1E9Mdwwsg)
+
+
   *It should be noted that though most commits are from [suryachereddy](https://github.com/OUR-PALS/OUR-PALS-BOT), 3 others ([darshan1215](https://github.com/darshan1215), [Amulya Ganti](https://github.com/ganti0907) and [Sriya027](https://github.com/Sriya027)) have also contributed for the project (including parts of the code). We thank [Dr. Chakravarthula Kiran](https://github.com/kirandotc) (our faculty guide) and [Srujan Panuganti](https://github.com/srujanpanuganti) for their valuable inputs to the project.*
 
 This package integrates [pupil tracking code](https://github.com/OUR-PALS/Vision_Tracking) with ROS to control a robot by publishing '/cmd_vel' message corresponding to the pupils' position. 
