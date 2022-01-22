@@ -1,4 +1,5 @@
 # Pupil tracking package for ROS
+**Please drop a star ⭐ if you like the project.**
 
   *It should be noted that though most commits are from [suryachereddy](https://github.com/OUR-PALS/OUR-PALS-BOT), 3 others ([darshan1215](https://github.com/darshan1215), [Amulya Ganti](https://github.com/ganti0907) and [Sriya027](https://github.com/Sriya027)) have also contributed for the project (including parts of the code). We thank [Dr. Chakravarthula Kiran](https://github.com/kirandotc) (our faculty guide) and [Srujan Panuganti](https://github.com/srujanpanuganti) for their valuable inputs to the project.*
 
@@ -23,4 +24,3 @@ Click [here](https://github.com/OUR-PALS/OUR-PALS-BOT) for the Teensy (robot con
 
 *For any doubts regarding the project feel free to ask in "issues".*
 
-**Please drop a star ⭐ if you like the project.**
